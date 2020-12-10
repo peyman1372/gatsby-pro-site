@@ -15,6 +15,7 @@ import {
   GOOGLE_ADDRESS,
   IS_VALID_VAT,
   VALIDATING_VAT,
+  ENTER_PRESSED,
 } from "../action/types";
 
 import _ from "lodash";
@@ -109,6 +110,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, isValidatingVat: true };
     case IS_VALID_VAT:
       return { ...state, isValidVat: action.payload, isValidatingVat: false };
+    case ENTER_PRESSED:
+      return { ...state, keyCode: action.payload };
     default:
       return state;
   }
@@ -118,7 +121,7 @@ export default (state = INITIAL_STATE, action) => {
 function transformInitialData(data) {
   // Products
   let products = [];
-  data.products.map(p => {
+  data.products.map((p) => {
     let product = {
       label: p.name,
       value: p.value,
@@ -140,7 +143,7 @@ function transformInitialData(data) {
   ];
   let transports = [];
 
-  data.transports.map(t => {
+  data.transports.map((t) => {
     const index = transportTypesOrder.indexOf(t._id);
     if (index !== -1) {
       let transport = { label: t._id, value: t._id, sortIndex: index };
@@ -151,7 +154,7 @@ function transformInitialData(data) {
 
   // Countries
   let countries = [];
-  data.countries.map(c => {
+  data.countries.map((c) => {
     let country = { label: c.name, value: c.code };
     countries.push(country);
   });
@@ -159,7 +162,7 @@ function transformInitialData(data) {
 
   // Storage types
   let storageTypes = [];
-  data.storageTypes.map(t => {
+  data.storageTypes.map((t) => {
     let type = { label: t.name, value: t.value };
     storageTypes.push(type);
   });
@@ -174,7 +177,7 @@ function transformInitialData(data) {
     "private",
     "consumer",
   ];
-  data.companyTypes.map(t => {
+  data.companyTypes.map((t) => {
     let type = {
       label: t.fieldName,
       value: t.fieldName,
@@ -188,7 +191,7 @@ function transformInitialData(data) {
 
   // Hear about types
   let hearAboutTypes = [];
-  data.hearAboutTypes.map(t => {
+  data.hearAboutTypes.map((t) => {
     let type = {
       label: t.fieldName,
       value: t.fieldName,

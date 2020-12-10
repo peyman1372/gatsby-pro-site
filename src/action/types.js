@@ -14,3 +14,4 @@ export const SELECT_STEP = "select_step";
 export const GOOGLE_ADDRESS = "google_address";
 export const IS_VALID_VAT = "is_valid_vat";
 export const VALIDATING_VAT = "validating_vat";
+export const ENTER_PRESSED = "enter_pressed";

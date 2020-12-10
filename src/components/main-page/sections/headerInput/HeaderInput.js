@@ -54,7 +54,7 @@ class HeaderInput extends React.Component {
     return null;
   }
 
-  onChange = value => {
+  onChange = (value) => {
     let material = "";
     if (value.length) {
       material = value[0].materialId;
@@ -105,15 +105,15 @@ class HeaderInput extends React.Component {
   keyUp = () => {};
 
   render() {
+    const { refff } = this.props;
     const { t } = this.props;
     let products = _.cloneDeep(this.props.products);
-
     // This code it's because Select component uses value property of products as a key
     // And there are products repeated because they could have several parents -> repeated values in the collection
     // Because of that the render method causes an error and the dropdown it's not working properly
     if (products) {
       let count = 0;
-      products.map(p => {
+      products.map((p) => {
         p.value = count++;
       });
     }
@@ -151,7 +151,7 @@ class HeaderInput extends React.Component {
                   searchable={true}
                   clearable={true}
                   options={products}
-                  onChange={value => this.onChange(value)}
+                  onChange={(value) => this.onChange(value)}
                   className={styles.selectDropdown + " data-hj-whitelist"}
                   searchBy={"label"}
                 />
@@ -160,7 +160,8 @@ class HeaderInput extends React.Component {
                 <input
                   placeholder={t("Weight")}
                   className={styles.amountInput + " data-hj-whitelist"}
-                  onKeyUp={value => this.onChangeKilos(value)}
+                  onKeyUp={(value) => this.onChangeKilos(value)}
+                  ref={refff}
                 />
 
                 {this.state.error ? (

@@ -16,25 +16,40 @@ import {
   SELECT_STEP,
   IS_VALID_VAT,
   VALIDATING_VAT,
+  ENTER_PRESSED,
 } from "./types";
 
 const SERVER_URL = process.env.GATSBY_API_URL || "http://localhost:3000";
 
-export const loadLead = magicLink => {
+////////////
+// export const keyEntered = (keyCode) => {
+//   return (dispatch) => {
+//     if (keyCode == "13") {
+//       dispatch({ type: ENTER_PRESSED, payload: keyCode });
+//     }
+//   };
+//   // dispatch => {
+//   //   if (keyCode) {
+//   //     dispatch({ type: ENTER_PRESSED, payload: keyCode });
+//   //   }
+//   // };
+// };
+
+export const loadLead = (magicLink) => {
   const url = SERVER_URL + "/api/v1/lead/" + magicLink;
-  return dispatch => {
+  return (dispatch) => {
     if (magicLink) {
       dispatch({ type: SET_MAGIC_LINK, payload: magicLink });
       axios
         .get(url)
-        .then(data => dispatch({ type: LOADED_LEAD, payload: data.data }))
-        .catch(err => console.log(err));
+        .then((data) => dispatch({ type: LOADED_LEAD, payload: data.data }))
+        .catch((err) => console.log(err));
     }
   };
 };
 
-export const setMagicLink = magicLink => {
-  return dispatch => {
+export const setMagicLink = (magicLink) => {
+  return (dispatch) => {
     if (magicLink) {
       dispatch({ type: SET_MAGIC_LINK, payload: magicLink });
     }
@@ -45,17 +60,17 @@ export const updateLead = (magicLink, lead) => {
   const url = SERVER_URL + "/api/v1/lead/update";
   let update = {};
 
-  return dispatch => {
+  return (dispatch) => {
     if (magicLink) {
       axios
         .post(url, { magicLink, lead })
-        .then(data => {
+        .then((data) => {
           dispatch({ type: UPDATED_LEAD, payload: lead });
           if (data && data.data && data.data.files) {
             dispatch({ type: RELOAD_LEAD_FILES, payload: data.data.files });
           }
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     } else {
       dispatch({ type: UPDATED_LEAD, payload: lead });
     }
@@ -64,22 +79,24 @@ export const updateLead = (magicLink, lead) => {
 
 export const loadInitialInfo = () => {
   const url = SERVER_URL + "/api/v1/lead-data";
-  return dispatch => {
+  return (dispatch) => {
     axios
       .get(url)
-      .then(data => dispatch({ type: LOADED_INITIAL_INFO, payload: data.data }))
-      .catch(err => console.log(err));
+      .then((data) =>
+        dispatch({ type: LOADED_INITIAL_INFO, payload: data.data })
+      )
+      .catch((err) => console.log(err));
   };
 };
 
 export const loadUrlParameter = (field, value) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: UPDATE_CURRENT_LEAD, payload: { field, value } });
   };
 };
 
 export const addCartItem = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: ADD_CART_ITEM });
   };
 };
@@ -95,17 +112,17 @@ export const uploadFile = (magicLink, file, callback, context, type) => {
     context.props.lead.cart[context.props.lead.cart.length - 1].productID
   );
   form_data.append("type", type);
-  return dispatch => {
+  return (dispatch) => {
     axios
       .post(url, form_data)
-      .then(data => {
+      .then((data) => {
         dispatch({ type: UPDATE_LEAD_ID, leadId: data.data.leadId });
         return data;
       })
-      .then(data => {
+      .then((data) => {
         callback(context, data.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         callback(context);
       });
@@ -114,18 +131,18 @@ export const uploadFile = (magicLink, file, callback, context, type) => {
 
 export const deleteFile = (magicLink, fileId, callback, context) => {
   const url = SERVER_URL + "/api/v1/lead/file";
-  return dispatch => {
+  return (dispatch) => {
     axios
       .delete(url, { data: { magicLink, fileId } })
-      .then(data => {
+      .then((data) => {
         callback(context, fileId);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
 };
 
-export const googleAddress = value => {
-  return dispatch => {
+export const googleAddress = (value) => {
+  return (dispatch) => {
     axios
       .get(
         "https://maps.googleapis.com/maps/api/place/autocomplete/json?types=address&language=fr&key=AIzaSyBfDwQK3D11mRl5zact_Hk-QctWpfqEkKk&input=" +
@@ -137,16 +154,16 @@ export const googleAddress = value => {
           },
         }
       )
-      .then(response => response.json())
-      .then(json => {
+      .then((response) => response.json())
+      .then((json) => {
         var rst = [];
         if (json.status === "OK") {
-          json.results.map(address => {
+          json.results.map((address) => {
             var country = null;
             var postal_code = null;
             var route = null;
 
-            address.address_components.forEach(val => {
+            address.address_components.forEach((val) => {
               if (val.types.includes("postal_code")) {
                 postal_code = val.long_name;
               }
@@ -177,7 +194,7 @@ export const googleAddress = value => {
 };
 
 export const showConfirmationScreen = (magicLink, lead) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: SHOW_CONFIRMATION_SCREEN });
   };
 };
@@ -185,46 +202,46 @@ export const showConfirmationScreen = (magicLink, lead) => {
 export const sendConfirmation = (magicLink, lead) => {
   const url = SERVER_URL + "/api/v1/lead/confirmation";
 
-  return dispatch => {
+  return (dispatch) => {
     axios
       .post(url, { magicLink, lead })
-      .then(data => {
+      .then((data) => {
         dispatch({ type: SEND_CONFIRMATION_FINISHED });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
 };
 
-export const showHideFilled = value => {
-  return dispatch => {
+export const showHideFilled = (value) => {
+  return (dispatch) => {
     dispatch({ type: SHOW_HIDE_FILLED, payload: value });
   };
 };
 
-export const selectStepState = value => {
-  return dispatch => {
+export const selectStepState = (value) => {
+  return (dispatch) => {
     dispatch({ type: SELECT_STEP, payload: value });
   };
 };
 
-export const validateVat = vat => {
+export const validateVat = (vat) => {
   const url = SERVER_URL + "/api/v1/validate-vat/" + vat;
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: VALIDATING_VAT });
     axios
       .get(url)
-      .then(data => dispatch({ type: IS_VALID_VAT, payload: true }))
-      .catch(err => dispatch({ type: IS_VALID_VAT, payload: false }));
+      .then((data) => dispatch({ type: IS_VALID_VAT, payload: true }))
+      .catch((err) => dispatch({ type: IS_VALID_VAT, payload: false }));
   };
 };
 
-export const shouldRedirectToWebshop = data => {
-  return dispatch => {
+export const shouldRedirectToWebshop = (data) => {
+  return (dispatch) => {
     const url = SERVER_URL + "/api/v1/redirectToPro/";
     const webshop = { group: null, buyer: null };
 
     let shouldCheck = true;
-    const cart = data.map(p => {
+    const cart = data.map((p) => {
       if (!p.productID || !p.quantity) {
         shouldCheck = false;
       }
@@ -237,13 +254,13 @@ export const shouldRedirectToWebshop = data => {
     if (shouldCheck) {
       axios
         .post(url, { cart, webshop })
-        .then(data => {
+        .then((data) => {
           const redirect = data.data.redirect;
           if (!redirect) {
             dispatch({ type: REDIRECT_TO_WEBSHOP });
           }
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 };

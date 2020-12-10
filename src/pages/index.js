@@ -26,13 +26,14 @@ class IndexPage extends React.Component {
       elementsLoaded: 0,
     };
     this.setElementsLoad = this.setElementsLoad.bind(this);
+    this.ref = React.createRef();
   }
 
   componentDidMount() {
     this.props.loadInitialInfo();
 
     /* HOTJAR cookies*/
-    !(function(e, t) {
+    !(function (e, t) {
       if (!document.getElementById(e)) {
         var c = document.createElement("script");
         (c.src = "//js.hs-analytics.net/analytics/1591784400000/2937843.js"),
@@ -42,7 +43,7 @@ class IndexPage extends React.Component {
         n.parentNode.insertBefore(c, n);
       }
     })("hs-analytics");
-    !(function(t, e, r) {
+    !(function (t, e, r) {
       if (!document.getElementById(t)) {
         var n = document.createElement("script");
         for (var a in ((n.src = "https://js.hs-banner.com/2937843.js"),
@@ -58,7 +59,7 @@ class IndexPage extends React.Component {
       "data-hsjs-portal": 2937843,
       "data-hsjs-env": "prod",
     });
-    !(function(t, e, r) {
+    !(function (t, e, r) {
       if (!document.getElementById(t)) {
         var n = document.createElement("script");
         for (var a in ((n.src = "https://js.hsleadflows.net/leadflows.js"),
@@ -80,10 +81,10 @@ class IndexPage extends React.Component {
 
     /* End cookies code*/
 
-    (function(h, o, t, j, a, r) {
+    (function (h, o, t, j, a, r) {
       h.hj =
         h.hj ||
-        function() {
+        function () {
           (h.hj.q = h.hj.q || []).push(arguments);
         };
       h._hjSettings = { hjid: 1661105, hjsv: 6 };
@@ -95,11 +96,11 @@ class IndexPage extends React.Component {
     })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
     /* GOOGLE ANALYTIC */
 
-    (function(i, s, o, g, r, a, m) {
+    (function (i, s, o, g, r, a, m) {
       i["GoogleAnalyticsObject"] = r;
       (i[r] =
         i[r] ||
-        function() {
+        function () {
           (i[r].q = i[r].q || []).push(arguments);
         }),
         (i[r].l = 1 * new Date());
@@ -119,13 +120,25 @@ class IndexPage extends React.Component {
     ga("require", "GTM-TCQNW7R");
     ga("require", "GTM-MT2QWQ7");
     ga("trackerPro.send", "pageview");
+
+    ////////////////////
+    document.addEventListener("keydown", this._handleKeyDown);
   }
+
+  _handleKeyDown = (event) => {
+    console.log(event.keyCode);
+    console.log(this.ref);
+    if (event.keyCode == "13") {
+      this.ref.current.focus();
+    }
+  };
 
   setElementsLoad(val) {
     this.setState({ elementsLoaded: val });
   }
 
   render() {
+    const { keyCode } = this.state;
     return (
       <I18nextProvider i18n={i18n} defaultNS={"default"}>
         <Helmet>
@@ -147,10 +160,7 @@ class IndexPage extends React.Component {
           <span> Pro</span>
         </div>
 
-
-
-
- <HeaderInputSection />
+        <HeaderInputSection refff={this.ref} />
 
         <CompleteSolutionSection />
 
@@ -158,18 +168,11 @@ class IndexPage extends React.Component {
 
         <Cards />
 
-
-
         <Truck />
 
         <EfficienceSection />
 
-
-
-
         <OnlineDocumentsSection />
-
-
 
         <ConsultingSection />
         <RequestFreeConsultationSection />
@@ -178,8 +181,6 @@ class IndexPage extends React.Component {
     );
   }
 }
-
- 
 
 function mapStateToProps({ leadForm }) {
   return {};
